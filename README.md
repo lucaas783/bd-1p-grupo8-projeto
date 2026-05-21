@@ -10,8 +10,8 @@
 
 ## git pull
 
-##### para atualizar o seu repositorio local com o remoto do github
-##### depois, faça o comando
+### para atualizar o seu repositorio local com o remoto do github
+### depois, faça o comando
 
 ## git fetch
 
