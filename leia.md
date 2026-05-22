@@ -5,7 +5,10 @@
 ### escrito por mim (Lucas)
 ### Pessoal, leiam:
 ### NÃO TRABALHE NA BRANCH MAIN OU DEVELOP!!!!!
-### Cada um vai ter uma branch (ramificação) para trabalhar na parte do seu código, com o seu respectivo nome:
+### Cada um vai ter uma branch (ramificação) para trabalhar na parte do seu código, com o seu respectivo nome.
+### Para acessar isso dentro do git bash (programa que nós vamos utilizar daqui para frente) tem que fazer isso:
+
+
 ### após clonar o repositorio, dê o comando:
 
 ## git pull
@@ -54,6 +57,11 @@
 ### :q  vai sair do arquivo sem salvar
 ### :q! vai sair do arquivo sem salvar de forma forçada
 ### Quando um desses comandos forem realizados, você vai sair automaticamente do modo de edição do arquivo.
+
+## Se der ruim, o que fazer?
+### O mais provável de acontecer, é que, pode-se acontecer alguns erros, como:
+### 1. dar git commit, git push sem dar git pull antes (e por consequencia a sua copia do repositório estiver desatualizada com a do github
+### 2. dar git commit, git push só que esqueceu de preparar ele (no caso, dar git add nome-do-arquivo)
 
 ### O que fazer depois de editar um arquivo?
 
