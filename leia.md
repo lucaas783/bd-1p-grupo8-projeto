@@ -3,12 +3,24 @@
 
 
 ### escrito por mim (Lucas)
-### Pessoal, leiam:
-### NÃO TRABALHE NA BRANCH MAIN OU DEVELOP!!!!!
-### Cada um vai ter uma branch (ramificação) para trabalhar na parte do seu código, com o seu respectivo nome.
+## Pessoal, leiam:
+
+### Primeiro, você deve baixar o git bash
 ### Para acessar isso dentro do git bash (programa que nós vamos utilizar daqui para frente) tem que fazer isso:
 
+### 1. acesse o link: https://git-scm.com/install/windows
+### Se não conseguir acessar o link direto, copia e cola no navegador e instale.
 
+### 2. Depois de baixado, entre no git bash
+### Após entrar, você estará na pasta ' C:\Users\seu-nome-de-usuario ', também conhecida como Diretório Pessoal ou até mesmo Home pra quem usa sistemas baseados em Unix e Linux. (indicada pelo ' ~ ' laranja). Para saber as coisas que estão dentro da pasta home (comando MUITO importante), é só digitar o comando: 
+
+## ls  
+### Que vai listar todas as pastas e arquivos presentes.
+
+###
+
+### NÃO TRABALHE NA BRANCH MAIN OU DEVELOP!!!!!
+### Cada um vai ter uma branch (ramificação) para trabalhar na parte do seu código, com o seu respectivo nome.
 ### após clonar o repositorio, dê o comando:
 
 ## git pull
