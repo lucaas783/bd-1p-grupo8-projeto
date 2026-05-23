@@ -33,14 +33,14 @@
 ### para baixar todos os arquivos e branches (ramificações) do github remoto para a sua máquina.
 ### depois, faça o comando
 
-## git branch -a OU git branch --all
+## git branch -a
 
 ### para mostrar todas as branches (ramificações) existentes. Você deve entrar na ramificação com o seu nome.
 ### depois, faça o comando
 
-## git checkout nome-da-ramificação
+## git checkout nome-da-ramificação OU git switch nome-da-ramificacao
 
-### para entrar na sua ramificação.
+### para entrar na sua ramificação. NOTA: digite o seu primeiro nome minusculo para entrar na sua ramificação.
 
 ### COMO FAZER ALTERAÇÕES E MANDAR PARA O REPOSITÓRIO REMOTO - GITHUB - A PARTIR DO GIT BASH
 
