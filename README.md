@@ -16,8 +16,17 @@
 
 ## ls  
 ### Que vai listar todas as pastas e arquivos presentes.
+### O comando:
 
-###
+## cd nome-da-pasta
+### vai fazer com que você entre na pasta digitada.
+
+### antes de fazer alguma alteração ou entrar em alguma pasta, no seu Diretório Pessoal, faça um clone do repositório.
+### Para clonar o repositório, digite o seguinte comando no terminal do Git Bash:
+
+## git clone https://github.com/lucaas783/bd-1p-grupo8-projeto.git
+
+### Com isso, o repositório já vai estar clonado, e você estará na branch (ramificação) main.
 
 ### NÃO TRABALHE NA BRANCH MAIN OU DEVELOP!!!!!
 ### Cada um vai ter uma branch (ramificação) para trabalhar na parte do seu código, com o seu respectivo nome.
