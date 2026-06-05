@@ -1,0 +1,33 @@
+cadastro = []
+
+try:
+    nome = input("Digite o seu nome: ").strip()
+    if not nome.replace(" ", "").isalpha():
+        raise ValueError("O nome deve conter apenas letras.")
+    cadastro.append(nome)
+
+    login = input("Digite seu login: ").strip().lower()
+    if not (6 <= len(login) <= 40):
+        raise ValueError("O login deve ter entre 6 e 40 caracteres.")
+    if "@" not in login:
+        raise ValueError("O login deve conter o caractere '@'.")
+    cadastro.append(login)
+
+    senha = input("Digite sua senha: ").strip()
+    confirmar_senha = input("Confirme sua senha: ").strip()
+    if senha != confirmar_senha:
+        raise ValueError("As senhas não coincidem.")
+    if len(senha) < 4:
+        raise ValueError("A senha deve ter no mínimo 4 caracteres.")
+    caracteres_especiais = "!@#$%"
+    if not any(caractere in caracteres_especiais for caractere in senha):
+        raise ValueError(
+            f"A senha deve conter pelo menos um caractere especial ({caracteres_especiais})."
+        )
+    cadastro.extend([senha, confirmar_senha])
+    print("Cadastro realizado com sucesso!")
+
+except ValueError as erro:
+    print(f"Erro: {erro}")
+
+print(cadastro)
