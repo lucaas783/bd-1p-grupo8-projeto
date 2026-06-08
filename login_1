@@ -1,0 +1,14 @@
+def login(usuarios):
+
+    email = input("Digite seu e-mail: ").strip().lower()
+    senha = input("Digite sua senha: ").strip()
+
+    for usuario in usuarios:
+
+        if usuario["email"] == email and usuario["senha"] == senha:
+            print("\nLogin realizado com sucesso!")
+            print(f"Bem-vindo, {usuario['nome']}!")
+            return usuario
+
+    print("E-mail ou senha incorretos.")
+    return None
