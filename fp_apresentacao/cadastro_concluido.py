@@ -124,6 +124,8 @@ def listar_usuarios():
             print(f"Nome: {usuario[0]} {usuario[1]}")
             print(f"E-mail: {usuario[2]}")
 
+    input("Aperte a tecla ENTER para sair.")
+
 
 def buscar_usuario():
 
@@ -143,6 +145,8 @@ def buscar_usuario():
         print(f"E-mail: {usuario[2]}")
     else:
         print("Usuário não encontrado.")
+
+    input("Aperte a tecla ENTER para sair.")
 
 
 def atualizar_usuario():
