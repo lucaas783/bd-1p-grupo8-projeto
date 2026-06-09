@@ -1,8 +1,34 @@
-usuarios = []  # Lista para armazenar os usuários cadastrados.
+import sqlite3
+import os, platform
+
+def limpar_tela():
+    sistema_operacional = platform.system()
+
+    if sistema_operacional == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+
+# config o banco de dados
+def inicializar_banco():
+    conexao = sqlite3.connect("Dados.db")
+    cursor = conexao.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Dados (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            sobrenome TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            senha TEXT NOT NULL
+        )
+    """)
+    conexao.commit()
+    conexao.close()
 
 
-def cadastrar_usuario(usuarios):
+def cadastrar_usuario():
     while True:
+        limpar_tela()
         try:
             nome_completo = input("Digite seu nome completo: ").strip()
             if not nome_completo:
@@ -21,168 +47,205 @@ def cadastrar_usuario(usuarios):
             usuario_email, dominio = email.split("@")
             if not usuario_email or "." not in dominio:
                 raise ValueError("Digite um e-mail válido.")
-            for usuario in usuarios:
-                if usuario["email"] == email:
-                    raise ValueError("E-mail já cadastrado.")
+
+            # Conectar ao banco para verificar se o e-mail já existe
+            conexao = sqlite3.connect("Dados.db")
+            cursor = conexao.cursor()
+            cursor.execute("SELECT email FROM Dados WHERE email = ?", (email,)) # esse tipo de consulta é melhor do que concatenar strings usando o f-string pq previne SQL injection
+            
+            if cursor.fetchone():
+                conexao.close()
+                raise ValueError("E-mail já cadastrado.")
 
             senha = input("Digite sua senha: ").strip()
             confirmar_senha = input("Confirme sua senha: ").strip()
             if len(senha) < 6:
+                conexao.close()
                 raise ValueError("A senha deve ter pelo menos 6 caracteres.")
             if senha != confirmar_senha:
+                conexao.close()
                 raise ValueError("As senhas não coincidem.")
 
-            cadastro = {
-                "nome": nome,
-                "sobrenome": sobrenome,
-                "email": email,
-                "senha": senha
-            }
+            # Inserir no banco de dados
+            cursor.execute("""
+                INSERT INTO Dados (nome, sobrenome, email, senha) 
+                VALUES (?, ?, ?, ?)
+            """, (nome, sobrenome, email, senha))
+            
+            conexao.commit()
+            conexao.close()
 
-            usuarios.append(cadastro)
-
-            print("\nCadastro realizado com sucesso!")
+            print("\nCadastro realizado com sucesso!\n")
             break
 
         except ValueError as erro:
             print(f"Erro: {erro}")
 
-def login_usuario(usuarios):
+
+def login_usuario():
+    limpar_tela()
     email = input("Digite seu e-mail: ").strip().lower()
     senha = input("Digite sua senha: ").strip()
 
-    for usuario in usuarios:
+    conexao = sqlite3.connect("Dados.db")
+    cursor = conexao.cursor()
+    
+    # Busca o usuário com o e-mail e senha correspondentes
+    cursor.execute("SELECT nome, sobrenome, email FROM Dados WHERE email = ? AND senha = ?", (email, senha))
+    usuario = cursor.fetchone()
+    conexao.close()
 
-        if usuario["email"] == email and usuario["senha"] == senha:
-            print("\nLogin realizado com sucesso!")
-            print(f"Bem-vindo, {usuario['nome']}!")
-            return usuario
+    if usuario:
+        limpar_tela()
+        print("\nLogin realizado com sucesso!")
+        print(f"Bem-vindo, {usuario[0]}!")
+        return {"nome": usuario[0], "sobrenome": usuario[1], "email": usuario[2]}
+    else:
+        print("E-mail ou senha incorretos.")
+        return None
 
-    print("E-mail ou senha incorretos.")
-    return None
 
-def listar_usuarios(usuarios):
+def listar_usuarios():
+
+    limpar_tela()
+
+    conexao = sqlite3.connect("Dados.db")
+    cursor = conexao.cursor()
+    cursor.execute("SELECT nome, sobrenome, email FROM Dados")
+    usuarios = cursor.fetchall()
+    conexao.close()
+
     if not usuarios:
         print("Nenhum usuário cadastrado.")
-
     else:
         print("\n=== USUÁRIOS CADASTRADOS ===")
-
         for usuario in usuarios:
             print("-" * 30)
-            print(f"Nome: {usuario['nome']} {usuario['sobrenome']}")
-            print(f"E-mail: {usuario['email']}")
+            print(f"Nome: {usuario[0]} {usuario[1]}")
+            print(f"E-mail: {usuario[2]}")
 
-def buscar_usuario(usuarios):
+
+def buscar_usuario():
+
+    limpar_tela()
+
     email = input("Digite o e-mail para busca: ").strip().lower()
 
-    encontrado = False
+    conexao = sqlite3.connect("Dados.db")
+    cursor = conexao.cursor()
+    cursor.execute("SELECT nome, sobrenome, email FROM Dados WHERE email = ?", (email,))
+    usuario = cursor.fetchone()
+    conexao.close()
 
-    for usuario in usuarios:
-        if usuario["email"] == email:
-
-            print("\nUsuário encontrado!")
-            print(f"Nome: {usuario['nome']} {usuario['sobrenome']}")
-            print(f"E-mail: {usuario['email']}")
-
-            encontrado = True
-            break
-
-    if not encontrado:
-        print("Usuário não encontrado.")
-
-def atualizar_usuario(usuarios):
-    email = input("Digite o e-mail do usuário: ").strip().lower()
-
-    for usuario in usuarios:
-
-        if usuario["email"] == email:
-
-            novo_nome = input("Novo nome: ").strip()
-
-            if novo_nome:
-                if not novo_nome.isalpha():
-                    print("Nome inválido.")
-                else:
-                    usuario["nome"] = novo_nome
-
-            novo_sobrenome = input("Novo sobrenome: ").strip()
-
-            if novo_sobrenome:
-                if not novo_sobrenome.replace(" ", "").isalpha():
-                    print("Sobrenome inválido.")
-                else:
-                    usuario["sobrenome"] = novo_sobrenome
-
-            print("Usuário atualizado com sucesso!")
-            break
-
+    if usuario:
+        print("\nUsuário encontrado!")
+        print(f"Nome: {usuario[0]} {usuario[1]}")
+        print(f"E-mail: {usuario[2]}")
     else:
         print("Usuário não encontrado.")
 
-def excluir_usuario(usuarios):
+
+def atualizar_usuario():
+    limpar_tela()
     email = input("Digite o e-mail do usuário: ").strip().lower()
 
-    for usuario in usuarios:
+    conexao = sqlite3.connect("Dados.db")
+    cursor = conexao.cursor()
+    
+    # Verifica se o usuário existe antes de tentar atualizar
+    cursor.execute("SELECT nome, sobrenome FROM Dados WHERE email = ?", (email,))
+    usuario = cursor.fetchone()
 
-        if usuario["email"] == email:
+    if usuario:
 
-            usuarios.remove(usuario)
+        # Se o usuário der "Enter" sem digitar nada, mantém o valor antigo
 
-            print("Usuário removido com sucesso!")
-            break
+        novo_nome = input(f"Novo nome [{usuario[0]}]: ").strip()
+        if novo_nome and not novo_nome.isalpha():
+
+            print("Nome inválido. Alteração descartada.")
+            novo_nome = usuario[0]
+
+        elif not novo_nome:
+            novo_nome = usuario[0]
+
+        novo_sobrenome = input(f"Novo sobrenome [{usuario[1]}]: ").strip()
+        if novo_sobrenome and not novo_sobrenome.replace(" ", "").isalpha():
+
+            print("Sobrenome inválido. Alteração descartada.")
+            novo_sobrenome = usuario[1]
+
+        elif not novo_sobrenome:
+            novo_sobrenome = usuario[1]
+
+        # Atualiza no banco
+        cursor.execute("""
+            UPDATE Dados 
+            SET nome = ?, sobrenome = ? 
+            WHERE email = ?
+        """, (novo_nome, novo_sobrenome, email))
+        
+        conexao.commit()
+        print("Usuário atualizado com sucesso!")
+    else:
+        print("Usuário não encontrado.")
+        
+    conexao.close()
+
+
+def excluir_usuario():
+    limpar_tela()
+    email = input("Digite o e-mail do usuário: ").strip().lower()
+
+    conexao = sqlite3.connect("Dados.db")
+    cursor = conexao.cursor()
+    
+    # Verifica se o usuário existe
+    cursor.execute("SELECT email FROM Dados WHERE email = ?", (email,))
+    if cursor.fetchone():
+
+        cursor.execute("DELETE FROM Dados WHERE email = ?", (email,))
+        conexao.commit()
+        print("Usuário removido com sucesso!")
 
     else:
         print("Usuário não encontrado.")
+        
+    conexao.close()
 
-# --- FLUXO PRINCIPAL (MENU) --- (não irá rodar no código principal.)
 
+# --- FLUXO PRINCIPAL (MENU) ---
 def menu_conta():
-    while True:
+    # Garante que o banco e a tabela existam antes de rodar o menu
+    inicializar_banco()
 
+    while True:
+        limpar_tela()
         print("\n===== MENU CADASTRO =====")
-        print("1 - Cadastrar")
-        print("2 - Login")
-        print("3 - Listar")
-        print("4 - Buscar")
-        print("5 - Atualizar")
-        print("6 - Excluir")
-        print("7 - Voltar ao Menu Principal")
+        print("1 - Listar")
+        print("2 - Buscar")
+        print("3 - Atualizar")
+        print("4 - Excluir")
+        print("5 - Voltar ao Menu Principal")
         print("0 - Sair")
 
         opcao = input("Escolha uma opção: ").strip()
 
-        # CREATE
         if opcao == "1":
-            cadastrar_usuario(usuarios)
-
-        # LOGIN
-        if opcao == "2":
-            login_usuario(usuarios)
-
-        # READ
+            listar_usuarios()
+        elif opcao == "2":
+            buscar_usuario()
         elif opcao == "3":
-            listar_usuarios(usuarios)
-
-        # BUSCAR
+            atualizar_usuario()
         elif opcao == "4":
-            buscar_usuario(usuarios)
-
-        # UPDATE
+            excluir_usuario()
         elif opcao == "5":
-            atualizar_usuario(usuarios)
-
-        # DELETE
-        elif opcao == "6":
-            excluir_usuario(usuarios)
-
-        elif opcao == "7":
             print("Voltando ao menu principal...")
             break
-
         elif opcao == "0":
             print("Programa encerrado.")
-            break
-
+            exit()
         else:
             print("Opção inválida.")
+
+inicializar_banco() # chamar o arquivo pra ele ser executado imediatamente (FALLBACK)

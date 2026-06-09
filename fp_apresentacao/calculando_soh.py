@@ -11,10 +11,21 @@
 # Front de Pedro tbm foi uma fonte
 # Eu tbm copiei as respostas iguais a do front de pedro inclusive os mesmos emojis pra ficar igual ao front que ele mandou, vou mandar no github isso agora (acredito que está pronto).
 
+import os, platform
+
+def limpar_tela():
+    sistema_operacional = platform.system()
+
+    if sistema_operacional == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+
 def calcular_soh():
     print("\n===== CALCULADORA DA SAÚDE DA BATERIA (SoH) =====\n")
 
-    while True: 
+    while True:
+        limpar_tela() 
         try:
             autonomia_original = float(input("1. Qual a autonomia original do veículo (em km)? "))
             autonomia_atual = float(input("2. Qual a autonomia percebida hoje (em km)? "))
@@ -24,7 +35,7 @@ def calcular_soh():
             continue
         break
 
-    # Fatores de impacto (aquelas perguntas que tinha dentro do JS de pedro)
+    # Fatores de impacto (aquelas perguntas que tinha dentro do front de pedro)
     opcoes_uso = {
         "1": {"texto": "🌿 Pouco uso", "peso": 1.0},
         "2": {"texto": "🚗 Uso moderado", "peso": 1.1},
@@ -81,6 +92,15 @@ def calcular_soh():
     if soh_final > eficiencia_autonomia:
         soh_final = eficiencia_autonomia
 
+
+    # Diagnóstico final
+    if soh_final >= 80:
+        status = "🔋 Status: Excelente! A bateria está muito saudável."
+    elif soh_final >= 70:
+        status = "🟡 Status: Segunda vida. Inutilizável para o carro, recomendável para ser encaminhada para segunda vida."
+    else:
+        status = "⚠️ Alerta: A degradação está bastante elevada. Considere uma avaliação profissional para possível substituição."
+
     # printando os resultados 
     print("\n" + "="*40)
     print("         RELATÓRIO DE SAÚDE DA BATERIA      ")
@@ -89,16 +109,36 @@ def calcular_soh():
     print(f" Penalidade por Perfil de Uso:  -{degradacao_estimada:.2f}%")
     print("-"*40)
     print(f" ESTADO DE SAÚDE ESTIMADO (SoH): {soh_final:.2f}%")
+    print('-'*40)
+    print(status)
     print("="*40)
 
-    # Diagnóstico final
-    if soh_final >= 80:
-        print("🔋 Status: Excelente! A bateria está muito saudável.")
-    elif soh_final >= 70:
-        print("🟡 Status: Segunda vida. Inutilizável para o carro, recomendável para ser encaminhada para segunda vida.")
-    else:
-        print("⚠️ Alerta: A degradação está bastante elevada. Considere uma avaliação profissional para possível substituição.")
+    # fazer um arquivo markdown para salvar no PC como relatorio
 
+    arquivo_relatorio = "ecovolt_relatorio_soh.md"
+
+    conteudo_relatorio = f"""========================================
+       RELATÓRIO DE SAÚDE DA BATERIA (SoH)
+========================================
+DADOS DE ENTRADA:
+- Autonomia Original: {autonomia_original} km
+- Autonomia Atual: {autonomia_atual} km
+- Idade do Veículo: {idade} anos
+
+MÉTRICAS COLETADAS:
+- Eficiência de Autonomia Direta: {eficiencia_autonomia:.2f}%
+- Penalidade por Perfil de Uso: -{degradacao_estimada:.2f}%
+
+RESULTADO FINAL:
+- ESTADO DE SAÚDE ESTIMADO (SoH): {soh_final:.2f}%
+- Diagnóstico: {status}
+========================================
+Gerado automaticamente pelo sistema de cálculo SoH.
+"""
+
+    with open(arquivo_relatorio, "w") as arquivo:
+        arquivo.write(conteudo_relatorio)
+    print(f"\n📄 Relatório detalhado salvo como '{arquivo_relatorio}'.")
 
 
 if __name__ == "__main__":

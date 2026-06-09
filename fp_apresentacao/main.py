@@ -1,10 +1,30 @@
 import cadastro_concluido as cadastro
-from calculando_soh import calcular_soh 
-from menu_principal import menu_principal
-from os import system
+from menu_logado import menu_principal, limpar_tela
+import os, platform, time, sqlite3
+
+def limpar_tela():
+    sistema_operacional = platform.system()
+
+    if sistema_operacional == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+
+
+def mensagem_boas_vindas():
+    conexao = sqlite3.connect("Dados.db")
+    cursor = conexao.cursor()
+    
+    # Busca o usuário com o e-mail e senha correspondentes
+    cursor.execute("SELECT nome, sobrenome, FROM Dados WHERE email = ? AND senha = ?", (email, senha))
+    usuario = cursor.fetchone()
+    conexao.close()
+    return f"bem vindo, {usuario[0]} {usuario[1]}!"
 
 def main():
-    system("cls")
+
+    limpar_tela()
+    mensagem_boas_vindas()
 
     print("\nBem-vindo ao EcoVolt Analytics! O sistema de avaliação de saúde da bateria do seu veículo elétrico!")
 
@@ -20,7 +40,7 @@ def main():
 
             while True:
 
-                usuario_logado = cadastro.login_usuario(cadastro.usuarios)
+                usuario_logado = cadastro.login_usuario()
                 if usuario_logado:
                     menu_principal()  # Só chama se usuario_logado for true
                     break
@@ -31,16 +51,16 @@ def main():
                     escolha_login = input("Digite \"1\" para tentar login novamente ou \"2\" para cadastro: ").strip()
 
                     if escolha_login == "2":
-                        cadastro.cadastrar_usuario(cadastro.usuarios) # chama a função aqui dentro mesmo (para melhorar a experiência do usuario)
+                        cadastro.cadastrar_usuario() # chama a função aqui dentro mesmo (para melhorar a experiência do usuario)
 
                         menu_principal()  # Chama o menu principal após o cadastro
                         break
 
 
         elif escolha == "2":
-            cadastro.cadastrar_usuario(cadastro.usuarios)
+            cadastro.cadastrar_usuario()
             menu_principal()  # Chama o menu principal após o cadastro
 
         elif escolha == "0":
-            print("Obrigado por usar o EcoVolt Analytics! Até a próxima!")
+            print("\nObrigado por usar o EcoVolt Analytics! Até a próxima!")
             exit()
