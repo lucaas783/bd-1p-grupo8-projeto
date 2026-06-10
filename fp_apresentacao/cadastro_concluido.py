@@ -28,7 +28,7 @@ def inicializar_banco():
 
 def cadastrar_usuario():
     while True:
-        time.sleep(3)
+        time.sleep(1.5)
 
         limpar_tela()
         try: #Bloco onde podem ocorrer erros.
