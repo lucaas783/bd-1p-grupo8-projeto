@@ -29,13 +29,13 @@ def inicializar_banco():
 def cadastrar_usuario():
     while True:
         limpar_tela()
-        try:
-            nome_completo = input("Digite seu nome completo: ").strip()
+        try: #Bloco onde podem ocorrer erros.
+            nome_completo = input("Digite seu nome completo: ").strip() #remove os espaços
             if not nome_completo:
                 raise ValueError("O nome não pode ficar vazio.")
-            if not nome_completo.replace(" ", "").isalpha():
+            if not nome_completo.replace(" ", "").isalpha(): #existe apenas letras
                 raise ValueError("O nome deve conter apenas letras.")
-            partes_nome = nome_completo.split()
+            partes_nome = nome_completo.split() #divide o texto
             if len(partes_nome) < 2:
                 raise ValueError("Digite nome e sobrenome.")
             nome = partes_nome[0]
@@ -78,7 +78,7 @@ def cadastrar_usuario():
             print("\nCadastro realizado com sucesso!\n")
             break
 
-        except ValueError as erro:
+        except ValueError as erro: #Captura erros do tipo: ValueError
             print(f"Erro: {erro}")
 
 
