@@ -1,6 +1,6 @@
 import cadastro_concluido as cadastro
 from menu_logado import menu_principal, limpar_tela
-import os, platform, time, sqlite3
+import os, platform
 
 def limpar_tela():
     sistema_operacional = platform.system()
