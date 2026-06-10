@@ -140,6 +140,8 @@ Gerado automaticamente pelo sistema de cálculo SoH.
         arquivo.write(conteudo_relatorio)
     print(f"\n📄 Relatório detalhado salvo como '{arquivo_relatorio}'.")
 
+    input("Pressione ENTER para sair. ")
+
 
 if __name__ == "__main__":
     calcular_soh()

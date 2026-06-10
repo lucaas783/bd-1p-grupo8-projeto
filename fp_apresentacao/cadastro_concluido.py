@@ -1,5 +1,5 @@
 import sqlite3
-import os, platform
+import os, platform, time
 
 def limpar_tela():
     sistema_operacional = platform.system()
@@ -28,6 +28,8 @@ def inicializar_banco():
 
 def cadastrar_usuario():
     while True:
+        time.sleep(3)
+
         limpar_tela()
         try: #Bloco onde podem ocorrer erros.
             nome_completo = input("Digite seu nome completo: ").strip() #remove os espaços
@@ -99,6 +101,9 @@ def login_usuario():
         limpar_tela()
         print("\nLogin realizado com sucesso!")
         print(f"Bem-vindo, {usuario[0]}!")
+
+        time.sleep(2)
+
         return {"nome": usuario[0], "sobrenome": usuario[1], "email": usuario[2]}
     else:
         print("E-mail ou senha incorretos.")
@@ -191,8 +196,11 @@ def atualizar_usuario():
         
         conexao.commit()
         print("Usuário atualizado com sucesso!")
+        input("pressione ENTER para sair. ")
+
     else:
         print("Usuário não encontrado.")
+        input("pressione ENTER para sair. ")
         
     conexao.close()
 
@@ -211,6 +219,7 @@ def excluir_usuario():
         cursor.execute("DELETE FROM Dados WHERE email = ?", (email,))
         conexao.commit()
         print("Usuário removido com sucesso!")
+        input("pressione ENTER para sair. ")
 
     else:
         print("Usuário não encontrado.")
