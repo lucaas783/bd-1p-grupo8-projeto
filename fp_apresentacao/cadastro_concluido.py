@@ -51,7 +51,7 @@ def cadastrar_usuario():
             # Conectar ao banco para verificar se o e-mail já existe
             conexao = sqlite3.connect("Dados.db")
             cursor = conexao.cursor()
-            cursor.execute("SELECT email FROM Dados WHERE email = ?", (email,)) # esse tipo de consulta é melhor do que concatenar strings usando o f-string pq previne SQL injection. Vai comparar o que o usuário escreveu (o que tá dentro da tupla) e vai comparar com o que está no banco de dados (no placeholder "?")
+            cursor.execute("SELECT email FROM Dados WHERE email = ?", (email,)) # esse tipo de consulta é melhor do que concatenar strings usando o f-string pq previne SQL injection.
             
             if cursor.fetchone():
                 conexao.close()
