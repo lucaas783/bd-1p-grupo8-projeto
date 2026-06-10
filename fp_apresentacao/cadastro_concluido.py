@@ -225,7 +225,7 @@ def menu_conta():
 
     while True:
         limpar_tela()
-        print("\n===== MENU CADASTRO =====")
+        print("\n===== MENU ADMINISTRADOR =====")
         print("1 - Listar")
         print("2 - Buscar")
         print("3 - Atualizar")
