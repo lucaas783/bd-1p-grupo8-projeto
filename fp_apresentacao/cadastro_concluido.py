@@ -162,7 +162,7 @@ def atualizar_usuario():
     cursor = conexao.cursor()
     
     # Verifica se o usuário existe antes de tentar atualizar
-    cursor.execute("SELECT nome, sobrenome FROM Dados WHERE email = ?", (email,))
+    cursor.execute("SELECT nome, sobrenome, senha FROM Dados WHERE email = ?", (email,))
     usuario = cursor.fetchone()
 
     if usuario:
@@ -187,12 +187,16 @@ def atualizar_usuario():
         elif not novo_sobrenome:
             novo_sobrenome = usuario[1]
 
+        nova_senha = input("Nova senha [ENTER para manter a atual]: ").strip()
+        if not nova_senha:
+            nova_senha = usuario[2]
+
         # Atualiza no banco
         cursor.execute("""
             UPDATE Dados 
-            SET nome = ?, sobrenome = ? 
+            SET nome = ?, sobrenome = ?, senha = ?
             WHERE email = ?
-        """, (novo_nome, novo_sobrenome, email))
+        """, (novo_nome, novo_sobrenome, nova_senha, email))
         
         conexao.commit()
         print("Usuário atualizado com sucesso!")
@@ -203,7 +207,6 @@ def atualizar_usuario():
         input("pressione ENTER para sair. ")
         
     conexao.close()
-
 
 def excluir_usuario():
     limpar_tela()
